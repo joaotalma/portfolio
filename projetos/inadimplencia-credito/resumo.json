@@ -1,0 +1,41 @@
+{
+  "fonte": "Banco Central do Brasil — API SGS (séries 21082 e 21084)",
+  "series": {
+    "21082": {
+      "nome": "Total",
+      "valor_atual": 4.74,
+      "mes_atual": "2026-05",
+      "variacao_12m_pp": 1.02,
+      "pico_historico": {
+        "valor": 4.74,
+        "mes": "2026-05"
+      },
+      "piso_historico": {
+        "valor": 2.16,
+        "mes": "2020-12"
+      },
+      "pico_pre_pandemia": {
+        "valor": 4.11,
+        "mes": "2017-05"
+      }
+    },
+    "21084": {
+      "nome": "Pessoa Física",
+      "valor_atual": 5.37,
+      "mes_atual": "2026-04",
+      "variacao_12m_pp": 1.24,
+      "pico_historico": {
+        "valor": 5.51,
+        "mes": "2012-05"
+      },
+      "piso_historico": {
+        "valor": 2.84,
+        "mes": "2020-12"
+      },
+      "pico_pre_pandemia": {
+        "valor": 5.51,
+        "mes": "2012-05"
+      }
+    }
+  }
+}
