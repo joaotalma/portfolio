@@ -1,0 +1,252 @@
+{
+ "fonte": "Olist Brazilian E-Commerce Public Dataset (Kaggle) — pedidos entregues, 2016–2018",
+ "kpis": {
+  "total": {
+   "receita": 15419773.75,
+   "pedidos": 96478,
+   "ticket_medio": 159.83,
+   "avaliacao_media": 4.16,
+   "dias_entrega_mediana": 10.0
+  },
+  "2016": {
+   "receita": 46653.74,
+   "pedidos": 267,
+   "ticket_medio": 174.73,
+   "avaliacao_media": 4.01,
+   "dias_entrega_mediana": 17.0
+  },
+  "2017": {
+   "receita": 6921535.24,
+   "pedidos": 43428,
+   "ticket_medio": 159.38,
+   "avaliacao_media": 4.17,
+   "dias_entrega_mediana": 11.0
+  },
+  "2018": {
+   "receita": 8451584.77,
+   "pedidos": 52783,
+   "ticket_medio": 160.12,
+   "avaliacao_media": 4.14,
+   "dias_entrega_mediana": 9.0
+  }
+ },
+ "mensal": [
+  {
+   "mes": "2016-09",
+   "receita": 143.46,
+   "pedidos": 1
+  },
+  {
+   "mes": "2016-10",
+   "receita": 46490.66,
+   "pedidos": 265
+  },
+  {
+   "mes": "2016-12",
+   "receita": 19.62,
+   "pedidos": 1
+  },
+  {
+   "mes": "2017-01",
+   "receita": 127482.37,
+   "pedidos": 750
+  },
+  {
+   "mes": "2017-02",
+   "receita": 271239.32,
+   "pedidos": 1653
+  },
+  {
+   "mes": "2017-03",
+   "receita": 414330.95,
+   "pedidos": 2546
+  },
+  {
+   "mes": "2017-04",
+   "receita": 390812.4,
+   "pedidos": 2303
+  },
+  {
+   "mes": "2017-05",
+   "receita": 566851.4,
+   "pedidos": 3546
+  },
+  {
+   "mes": "2017-06",
+   "receita": 490050.37,
+   "pedidos": 3135
+  },
+  {
+   "mes": "2017-07",
+   "receita": 566299.08,
+   "pedidos": 3872
+  },
+  {
+   "mes": "2017-08",
+   "receita": 645832.36,
+   "pedidos": 4193
+  },
+  {
+   "mes": "2017-09",
+   "receita": 701077.49,
+   "pedidos": 4150
+  },
+  {
+   "mes": "2017-10",
+   "receita": 751117.01,
+   "pedidos": 4478
+  },
+  {
+   "mes": "2017-11",
+   "receita": 1153364.2,
+   "pedidos": 7289
+  },
+  {
+   "mes": "2017-12",
+   "receita": 843078.29,
+   "pedidos": 5513
+  },
+  {
+   "mes": "2018-01",
+   "receita": 1077887.46,
+   "pedidos": 7069
+  },
+  {
+   "mes": "2018-02",
+   "receita": 966168.41,
+   "pedidos": 6555
+  },
+  {
+   "mes": "2018-03",
+   "receita": 1120598.24,
+   "pedidos": 7003
+  },
+  {
+   "mes": "2018-04",
+   "receita": 1132878.93,
+   "pedidos": 6798
+  },
+  {
+   "mes": "2018-05",
+   "receita": 1128774.52,
+   "pedidos": 6749
+  },
+  {
+   "mes": "2018-06",
+   "receita": 1011978.29,
+   "pedidos": 6099
+  },
+  {
+   "mes": "2018-07",
+   "receita": 1027807.28,
+   "pedidos": 6159
+  },
+  {
+   "mes": "2018-08",
+   "receita": 985491.64,
+   "pedidos": 6351
+  }
+ ],
+ "categorias": [
+  {
+   "nome": "beleza_saude",
+   "receita": 1412089.53
+  },
+  {
+   "nome": "relogios_presentes",
+   "receita": 1264333.12
+  },
+  {
+   "nome": "cama_mesa_banho",
+   "receita": 1225209.26
+  },
+  {
+   "nome": "esporte_lazer",
+   "receita": 1118256.91
+  },
+  {
+   "nome": "informatica_acessorios",
+   "receita": 1032723.77
+  },
+  {
+   "nome": "moveis_decoracao",
+   "receita": 880329.92
+  },
+  {
+   "nome": "utilidades_domesticas",
+   "receita": 758392.25
+  },
+  {
+   "nome": "cool_stuff",
+   "receita": 691680.89
+  },
+  {
+   "nome": "automotivo",
+   "receita": 669454.75
+  },
+  {
+   "nome": "ferramentas_jardim",
+   "receita": 567145.68
+  }
+ ],
+ "estados": [
+  {
+   "uf": "SP",
+   "receita": 5769703.15
+  },
+  {
+   "uf": "RJ",
+   "receita": 2055401.57
+  },
+  {
+   "uf": "MG",
+   "receita": 1818891.67
+  },
+  {
+   "uf": "RS",
+   "receita": 861472.79
+  },
+  {
+   "uf": "PR",
+   "receita": 781708.8
+  },
+  {
+   "uf": "SC",
+   "receita": 595127.78
+  },
+  {
+   "uf": "BA",
+   "receita": 591137.81
+  },
+  {
+   "uf": "DF",
+   "receita": 346123.35
+  },
+  {
+   "uf": "GO",
+   "receita": 334212.35
+  },
+  {
+   "uf": "ES",
+   "receita": 317657.93
+  }
+ ],
+ "pagamentos": [
+  {
+   "tipo": "credit_card",
+   "valor": 12101094.88
+  },
+  {
+   "tipo": "boleto",
+   "valor": 2769932.58
+  },
+  {
+   "tipo": "voucher",
+   "valor": 343013.19
+  },
+  {
+   "tipo": "debit_card",
+   "valor": 208421.12
+  }
+ ]
+}
