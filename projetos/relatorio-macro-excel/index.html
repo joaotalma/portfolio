@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório Excel automatizado · Selic, Dólar e IPCA · João Talma</title>
+<meta name="description" content="Case real de automação: script Python gera e atualiza sozinho um relatório Excel com Selic, dólar e IPCA via API do Banco Central e GitHub Actions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF8F0; --card:#FFFFFF;
+  --orange:#E85D04; --orange-deep:#C2410C; --orange-soft:#FFEDD5;
+  --ink:#1F2937; --ink-soft:#78716C; --line:#F0E2D0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.6}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+a{color:var(--orange-deep)}
+.top{display:flex;justify-content:space-between;align-items:center;padding:20px 0}
+.top a.volta{text-decoration:none;font-weight:600;font-size:.92rem;color:var(--ink-soft)}
+.top a.volta:hover{color:var(--orange)}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--orange-soft);color:var(--orange-deep);padding:6px 12px;border-radius:999px}
+h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,4.5vw,2.6rem);line-height:1.15;margin:18px 0 10px}
+.sub{color:var(--ink-soft);font-size:1.05rem;max-width:640px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:34px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 18px;transition:transform .15s ease, box-shadow .15s ease}
+.stat:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(232,93,4,.10)}
+.stat .num{font-family:'IBM Plex Mono',monospace;font-size:2rem;font-weight:600;color:var(--orange)}
+.stat .num.ink{color:var(--ink)}
+.stat .lbl{font-size:.85rem;color:var(--ink-soft);margin-top:4px}
+.figura{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:8px 0 34px}
+.figura img{width:100%;height:auto;display:block;border-radius:8px}
+.legenda{font-size:.85rem;color:var(--ink-soft);text-align:center;padding-top:10px}
+h2{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;margin:34px 0 12px}
+p{margin-bottom:12px}
+.pipeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0 8px}
+.passo{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px}
+.passo .n{font-family:'IBM Plex Mono',monospace;color:var(--orange);font-weight:600;font-size:.8rem}
+.passo strong{display:block;margin:4px 0 4px;font-family:'Space Grotesk',sans-serif}
+.passo span{font-size:.88rem;color:var(--ink-soft)}
+ul.meta{list-style:none;margin:10px 0}
+ul.meta li{padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+ul.meta li b{font-weight:600}
+.baixar{display:inline-block;background:var(--orange);color:#fff;font-weight:700;text-decoration:none;padding:12px 26px;border-radius:999px;margin:6px 0 10px;transition:transform .15s ease}
+.baixar:hover{transform:scale(1.04)}
+.cta{background:linear-gradient(135deg,var(--orange),var(--orange-deep));border-radius:18px;color:#fff;padding:34px 28px;margin:44px 0;text-align:center}
+.cta h2{margin:0 0 8px;color:#fff}
+.cta p{color:#FFE7D2}
+.botao{display:inline-block;margin-top:14px;background:#fff;color:var(--orange-deep);font-weight:700;text-decoration:none;padding:13px 28px;border-radius:999px;transition:transform .15s ease}
+.botao:hover{transform:scale(1.05)}
+footer{padding:26px 0 40px;color:var(--ink-soft);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="volta" href="../../index.html">← Voltar ao portfólio</a>
+    <span class="tag">Automação · Python + Excel</span>
+  </div>
+
+  <h1>Um relatório Excel que se atualiza sozinho, todo mês</h1>
+  <p class="sub">Script Python busca Selic, dólar e IPCA na API do Banco Central, monta um Excel formatado com capa, tabelas e gráficos — e o GitHub Actions roda tudo automaticamente. Zero cliques, zero copiar e colar.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="num">0</div><div class="lbl">Cliques por atualização — agendamento mensal via GitHub Actions</div></div>
+    <div class="stat"><div class="num ink">3</div><div class="lbl">Indicadores oficiais: Selic, dólar (venda) e IPCA</div></div>
+    <div class="stat"><div class="num ink">558</div><div class="lbl">Observações mensais tratadas (186 por série, desde 2011)</div></div>
+    <div class="stat"><div class="num">4 abas</div><div class="lbl">Capa com destaques + 1 aba por indicador, com tabela zebrada e gráfico</div></div>
+  </div>
+
+  <div class="figura">
+    <img src="prints/excel.png" alt="Print do relatório Excel gerado automaticamente, mostrando capa com destaques de Selic, dólar e IPCA em identidade visual laranja">
+    <div class="legenda">Capa do Excel gerado pelo script — valores reais de jun/2026: Selic 14,40% a.a. · dólar R$ 5,13 · IPCA 4,64% em 12m</div>
+  </div>
+
+  <a class="baixar" href="relatorio_macro.xlsx" download>⬇ Baixar o Excel gerado</a>
+
+  <h2>O problema que isso resolve</h2>
+  <p>Toda empresa tem aquele relatório que alguém monta na mão, toda semana ou todo mês: baixa dados, cola na planilha, arruma formatação, envia. É trabalho repetitivo, sujeito a erro e caro. Este case mostra o mesmo fluxo 100% automatizado — do dado bruto ao arquivo final — usando só ferramentas gratuitas.</p>
+
+  <h2>Como funciona</h2>
+  <div class="pipeline">
+    <div class="passo"><span class="n">01</span><strong>Extração</strong><span>API SGS do Banco Central: Selic (4189), dólar (3698) e IPCA (433), sem chave.</span></div>
+    <div class="passo"><span class="n">02</span><strong>Cálculo</strong><span>pandas: limpeza, tipos, IPCA acumulado 12 meses (juros compostos).</span></div>
+    <div class="passo"><span class="n">03</span><strong>Excel</strong><span>openpyxl: capa com destaques, abas por indicador, tabelas zebradas e gráficos nativos.</span></div>
+    <div class="passo"><span class="n">04</span><strong>Agendamento</strong><span>GitHub Actions roda o script todo mês e commita o Excel atualizado.</span></div>
+  </div>
+
+  <h2>Ficha técnica</h2>
+  <ul class="meta">
+    <li><b>Fonte:</b> Banco Central do Brasil — API SGS, séries 4189 (Selic), 3698 (dólar venda, média mensal) e 433 (IPCA mensal)</li>
+    <li><b>Período:</b> jan/2011 a jun/2026 · dados 100% públicos e reais</li>
+    <li><b>Stack:</b> Python · pandas · openpyxl · GitHub Actions (cron mensal)</li>
+    <li><b>Código:</b> <a href="gerar_relatorio.py">gerar_relatorio.py</a> + <a href="https://github.com/joaotalma/portfolio/blob/main/.github/workflows/atualizar-relatorio.yml">workflow de automação</a></li>
+  </ul>
+
+  <div class="cta">
+    <h2>Quantas horas por mês sua equipe gasta montando relatório na mão?</h2>
+    <p>Eu automatizo esse fluxo pra você. Primeira conversa sem compromisso.</p>
+    <a class="botao" href="https://wa.me/5511994396290?text=Oi%2C%20Jo%C3%A3o!%20Quero%20automatizar%20um%20relat%C3%B3rio%20como%20o%20do%20seu%20case." target="_blank" rel="noopener">Chamar no WhatsApp →</a>
+  </div>
+
+  <footer>João Talma · Análise de dados e automação · <a href="mailto:joaotalmaj@gmail.com">joaotalmaj@gmail.com</a> · <a href="https://linkedin.com/in/joaotalma" target="_blank" rel="noopener">LinkedIn</a></footer>
+</div>
+</body>
+</html>
