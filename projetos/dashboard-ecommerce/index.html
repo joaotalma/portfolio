@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de vendas e-commerce · 96 mil pedidos reais · João Talma</title>
+<meta name="description" content="Dashboard interativo estilo Power BI com 96 mil pedidos reais do dataset público Olist: receita, categorias, estados, pagamentos e avaliações.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#FFF8F0; --card:#FFFFFF;
+  --orange:#E85D04; --orange-deep:#C2410C; --orange-soft:#FFEDD5;
+  --ink:#1F2937; --ink-soft:#78716C; --line:#F0E2D0;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+a{color:var(--orange-deep)}
+.top{display:flex;justify-content:space-between;align-items:center;padding:20px 0;flex-wrap:wrap;gap:10px}
+.top a.volta{text-decoration:none;font-weight:600;font-size:.92rem;color:var(--ink-soft)}
+.top a.volta:hover{color:var(--orange)}
+.tag{font-family:'IBM Plex Mono',monospace;font-size:.75rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;background:var(--orange-soft);color:var(--orange-deep);padding:6px 12px;border-radius:999px}
+h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.5rem,4vw,2.2rem);line-height:1.15;margin:6px 0 6px}
+.sub{color:var(--ink-soft);font-size:1rem;max-width:720px;margin-bottom:18px}
+.filtros{display:flex;gap:8px;margin:10px 0 22px;flex-wrap:wrap}
+.filtros button{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:.85rem;padding:9px 20px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);cursor:pointer;transition:all .15s ease}
+.filtros button:hover{border-color:var(--orange)}
+.filtros button.ativo{background:var(--orange);border-color:var(--orange);color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;transition:transform .15s ease, box-shadow .15s ease}
+.kpi:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(232,93,4,.10)}
+.kpi .num{font-family:'IBM Plex Mono',monospace;font-size:1.55rem;font-weight:600;color:var(--orange)}
+.kpi .lbl{font-size:.8rem;color:var(--ink-soft);margin-top:2px}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-bottom:22px}
+.painel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.painel h3{font-family:'Space Grotesk',sans-serif;font-size:1rem;margin-bottom:12px}
+.c12{grid-column:span 12}.c7{grid-column:span 7}.c5{grid-column:span 5}.c6{grid-column:span 6}
+@media(max-width:820px){.c7,.c5,.c6{grid-column:span 12}}
+.nota{background:var(--orange-soft);border-radius:12px;padding:14px 18px;font-size:.88rem;color:var(--ink);margin:8px 0 26px}
+.cta{background:linear-gradient(135deg,var(--orange),var(--orange-deep));border-radius:18px;color:#fff;padding:30px 26px;margin:10px 0 30px;text-align:center}
+.cta h2{font-family:'Space Grotesk',sans-serif;margin-bottom:6px}
+.cta p{color:#FFE7D2}
+.botao{display:inline-block;margin-top:12px;background:#fff;color:var(--orange-deep);font-weight:700;text-decoration:none;padding:12px 26px;border-radius:999px;transition:transform .15s ease}
+.botao:hover{transform:scale(1.05)}
+footer{padding:10px 0 40px;color:var(--ink-soft);font-size:.85rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="volta" href="../../index.html">← Voltar ao portfólio</a>
+    <span class="tag">Business Intelligence · Dashboard</span>
+  </div>
+
+  <h1>Dashboard de vendas — e-commerce brasileiro</h1>
+  <p class="sub">96 mil pedidos reais do dataset público Olist (2016–2018), transformados em um painel interativo: receita, categorias, geografia, pagamentos e experiência do cliente.</p>
+
+  <div class="filtros" id="filtros" role="group" aria-label="Filtro por ano">
+    <button data-ano="total" class="ativo">Tudo</button>
+    <button data-ano="2016">2016</button>
+    <button data-ano="2017">2017</button>
+    <button data-ano="2018">2018</button>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num" id="k-receita">–</div><div class="lbl">Receita (itens + frete)</div></div>
+    <div class="kpi"><div class="num" id="k-pedidos">–</div><div class="lbl">Pedidos entregues</div></div>
+    <div class="kpi"><div class="num" id="k-ticket">–</div><div class="lbl">Ticket médio</div></div>
+    <div class="kpi"><div class="num" id="k-review">–</div><div class="lbl">Avaliação média (1–5)</div></div>
+    <div class="kpi"><div class="num" id="k-entrega">–</div><div class="lbl">Entrega — mediana (dias)</div></div>
+  </div>
+
+  <div class="grid">
+    <div class="painel c12"><h3>Receita e pedidos por mês</h3><canvas id="g-mensal" height="90"></canvas></div>
+    <div class="painel c7"><h3>Top 10 categorias por receita (período completo)</h3><canvas id="g-cat" height="150"></canvas></div>
+    <div class="painel c5"><h3>Formas de pagamento (período completo)</h3><canvas id="g-pag" height="180"></canvas></div>
+    <div class="painel c12"><h3>Top 10 estados por receita (período completo)</h3><canvas id="g-uf" height="70"></canvas></div>
+  </div>
+
+  <div class="nota"><b>Transparência:</b> este é um case demonstrativo com dados 100% reais e públicos (Olist/Kaggle). Construí o painel em tecnologia web para você navegar sem instalar nada — a mesma modelagem e os mesmos visuais que eu entrego em <b>Power BI</b> no dia a dia. Os filtros de ano recalculam os KPIs e a série mensal; os rankings usam o período completo.</div>
+
+  <div class="cta">
+    <h2>Quer enxergar suas vendas assim?</h2>
+    <p>Dashboard sob medida com seus dados, em Power BI ou web. Primeira conversa sem compromisso.</p>
+    <a class="botao" href="https://wa.me/5511994396290?text=Oi%2C%20Jo%C3%A3o!%20Vi%20seu%20dashboard%20de%20vendas%20e%20quero%20um%20para%20meu%20neg%C3%B3cio." target="_blank" rel="noopener">Chamar no WhatsApp →</a>
+  </div>
+
+  <footer>João Talma · Análise de dados e automação · <a href="mailto:joaotalmaj@gmail.com">joaotalmaj@gmail.com</a> · <a href="https://linkedin.com/in/joaotalma" target="_blank" rel="noopener">LinkedIn</a> · Dados: <a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce" target="_blank" rel="noopener">Olist (Kaggle)</a></footer>
+</div>
+
+<script id="dados-embutidos" type="application/json">
+{"fonte":"Olist Brazilian E-Commerce Public Dataset (Kaggle) — pedidos entregues, 2016–2018","kpis":{"total":{"receita":15419773.75,"pedidos":96478,"ticket_medio":159.83,"avaliacao_media":4.16,"dias_entrega_mediana":10.0},"2016":{"receita":46653.74,"pedidos":267,"ticket_medio":174.73,"avaliacao_media":4.01,"dias_entrega_mediana":17.0},"2017":{"receita":6921535.24,"pedidos":43428,"ticket_medio":159.38,"avaliacao_media":4.17,"dias_entrega_mediana":11.0},"2018":{"receita":8451584.77,"pedidos":52783,"ticket_medio":160.12,"avaliacao_media":4.14,"dias_entrega_mediana":9.0}},"mensal":[{"mes":"2016-09","receita":143.46,"pedidos":1},{"mes":"2016-10","receita":46490.66,"pedidos":265},{"mes":"2016-12","receita":19.62,"pedidos":1},{"mes":"2017-01","receita":127482.37,"pedidos":750},{"mes":"2017-02","receita":271239.32,"pedidos":1653},{"mes":"2017-03","receita":414330.95,"pedidos":2546},{"mes":"2017-04","receita":390812.4,"pedidos":2303},{"mes":"2017-05","receita":566851.4,"pedidos":3546},{"mes":"2017-06","receita":490050.37,"pedidos":3135},{"mes":"2017-07","receita":566299.08,"pedidos":3872},{"mes":"2017-08","receita":645832.36,"pedidos":4193},{"mes":"2017-09","receita":701077.49,"pedidos":4150},{"mes":"2017-10","receita":751117.01,"pedidos":4478},{"mes":"2017-11","receita":1153364.2,"pedidos":7289},{"mes":"2017-12","receita":843078.29,"pedidos":5513},{"mes":"2018-01","receita":1077887.46,"pedidos":7069},{"mes":"2018-02","receita":966168.41,"pedidos":6555},{"mes":"2018-03","receita":1120598.24,"pedidos":7003},{"mes":"2018-04","receita":1132878.93,"pedidos":6798},{"mes":"2018-05","receita":1128774.52,"pedidos":6749},{"mes":"2018-06","receita":1011978.29,"pedidos":6099},{"mes":"2018-07","receita":1027807.28,"pedidos":6159},{"mes":"2018-08","receita":985491.64,"pedidos":6351}],"categorias":[{"nome":"beleza_saude","receita":1412089.53},{"nome":"relogios_presentes","receita":1264333.12},{"nome":"cama_mesa_banho","receita":1225209.26},{"nome":"esporte_lazer","receita":1118256.91},{"nome":"informatica_acessorios","receita":1032723.77},{"nome":"moveis_decoracao","receita":880329.92},{"nome":"utilidades_domesticas","receita":758392.25},{"nome":"cool_stuff","receita":691680.89},{"nome":"automotivo","receita":669454.75},{"nome":"ferramentas_jardim","receita":567145.68}],"estados":[{"uf":"SP","receita":5769703.15},{"uf":"RJ","receita":2055401.57},{"uf":"MG","receita":1818891.67},{"uf":"RS","receita":861472.79},{"uf":"PR","receita":781708.8},{"uf":"SC","receita":595127.78},{"uf":"BA","receita":591137.81},{"uf":"DF","receita":346123.35},{"uf":"GO","receita":334212.35},{"uf":"ES","receita":317657.93}],"pagamentos":[{"tipo":"credit_card","valor":12101094.88},{"tipo":"boleto","valor":2769932.58},{"tipo":"voucher","valor":343013.19},{"tipo":"debit_card","valor":208421.12}]}
+</script>
+<script>
+const LARANJA = '#E85D04', GRAFITE = '#1F2937', SOFT = '#FFEDD5', LINHA = '#F0E2D0', CINZA = '#78716C';
+const D = JSON.parse(document.getElementById('dados-embutidos').textContent);
+
+const fmtBRL = v => v >= 1e6 ? 'R$ ' + (v/1e6).toLocaleString('pt-BR',{maximumFractionDigits:2}) + ' mi'
+                 : v >= 1e3 ? 'R$ ' + (v/1e3).toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mil'
+                 : 'R$ ' + v.toLocaleString('pt-BR',{maximumFractionDigits:2});
+const fmtNum = v => v.toLocaleString('pt-BR');
+
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.color = CINZA;
+
+// --- KPIs + série mensal (reagem ao filtro de ano) ---
+let graficoMensal;
+function aplicar(ano){
+  const k = D.kpis[ano];
+  document.getElementById('k-receita').textContent = fmtBRL(k.receita);
+  document.getElementById('k-pedidos').textContent = fmtNum(k.pedidos);
+  document.getElementById('k-ticket').textContent = 'R$ ' + k.ticket_medio.toLocaleString('pt-BR',{minimumFractionDigits:2});
+  document.getElementById('k-review').textContent = k.avaliacao_media.toLocaleString('pt-BR') + ' ★';
+  document.getElementById('k-entrega').textContent = k.dias_entrega_mediana.toLocaleString('pt-BR');
+
+  const meses = ano === 'total' ? D.mensal : D.mensal.filter(m => m.mes.startsWith(ano));
+  graficoMensal.data.labels = meses.map(m => m.mes);
+  graficoMensal.data.datasets[0].data = meses.map(m => m.receita);
+  graficoMensal.data.datasets[1].data = meses.map(m => m.pedidos);
+  graficoMensal.update();
+}
+
+document.getElementById('filtros').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  document.querySelectorAll('#filtros button').forEach(x => x.classList.remove('ativo'));
+  b.classList.add('ativo');
+  aplicar(b.dataset.ano);
+});
+
+// --- Gráficos ---
+graficoMensal = new Chart(document.getElementById('g-mensal'), {
+  data: {
+    labels: [],
+    datasets: [
+      {type:'bar', label:'Receita', data:[], backgroundColor:LARANJA, borderRadius:4, yAxisID:'y'},
+      {type:'line', label:'Pedidos', data:[], borderColor:GRAFITE, backgroundColor:GRAFITE, tension:.3, pointRadius:2, yAxisID:'y2'}
+    ]
+  },
+  options: {
+    interaction:{mode:'index', intersect:false},
+    plugins:{legend:{position:'top', align:'end'}, tooltip:{callbacks:{label: c => c.dataset.label === 'Receita' ? ' Receita: ' + fmtBRL(c.parsed.y) : ' Pedidos: ' + fmtNum(c.parsed.y)}}},
+    scales:{
+      y:{ticks:{callback: v => fmtBRL(v)}, grid:{color:LINHA}},
+      y2:{position:'right', grid:{display:false}, ticks:{callback: v => fmtNum(v)}},
+      x:{grid:{display:false}}
+    }
+  }
+});
+
+new Chart(document.getElementById('g-cat'), {
+  type:'bar',
+  data:{labels: D.categorias.map(c => c.nome.replaceAll('_',' ')),
+        datasets:[{data: D.categorias.map(c => c.receita), backgroundColor:LARANJA, borderRadius:4}]},
+  options:{indexAxis:'y', plugins:{legend:{display:false}, tooltip:{callbacks:{label: c => ' ' + fmtBRL(c.parsed.x)}}},
+           scales:{x:{ticks:{callback: v => fmtBRL(v)}, grid:{color:LINHA}}, y:{grid:{display:false}}}}
+});
+
+new Chart(document.getElementById('g-pag'), {
+  type:'doughnut',
+  data:{labels: D.pagamentos.map(p => ({credit_card:'Cartão de crédito', boleto:'Boleto', voucher:'Voucher', debit_card:'Cartão de débito'}[p.tipo] || p.tipo)),
+        datasets:[{data: D.pagamentos.map(p => p.valor), backgroundColor:[LARANJA,'#C2410C','#FDBA74',GRAFITE], borderWidth:2, borderColor:'#FFF8F0'}]},
+  options:{plugins:{legend:{position:'bottom'}, tooltip:{callbacks:{label: c => ' ' + c.label + ': ' + fmtBRL(c.parsed)}}}, cutout:'62%'}
+});
+
+new Chart(document.getElementById('g-uf'), {
+  type:'bar',
+  data:{labels: D.estados.map(e => e.uf),
+        datasets:[{data: D.estados.map(e => e.receita), backgroundColor: D.estados.map((_,i) => i === 0 ? '#C2410C' : LARANJA), borderRadius:4}]},
+  options:{plugins:{legend:{display:false}, tooltip:{callbacks:{label: c => ' ' + fmtBRL(c.parsed.y)}}},
+           scales:{y:{ticks:{callback: v => fmtBRL(v)}, grid:{color:LINHA}}, x:{grid:{display:false}}}}
+});
+
+aplicar('total');
+</script>
+</body>
+</html>
